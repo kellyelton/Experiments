@@ -96,7 +96,6 @@ process_material = SubResource( 8 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "walk"
-frame = 3
 playing = true
 
 [node name="Particles2D2" type="Particles2D" parent="."]

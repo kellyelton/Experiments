@@ -1,10 +1,17 @@
-extends Panel
+extends PanelContainer
 
 var player: Node2D = null
 
-# Called when the node enters the scene tree for the first time.
+func start(player: Node2D):
+	if player == null:
+		push_error("DebugPanel.start - player arg is null")
+
+	self.player = player
+	$GridContainer/ConfigGravitySlider.value = player.gravity
+	$GridContainer/ConfigGravityCurveSlider.value = player.gravity_curve
+
 func _ready():
-	var list = $"VFlowContainer/ItemList"
+	var list = $"GridContainer/ItemList"
 	
 	# 1
 	list.add_item("input direction:")
@@ -48,11 +55,17 @@ func _ready():
 	# 27
 	list.add_item("angle to COG:")
 	list.add_item("0.0 (0°)")
+	#29
+	list.add_item("gravity:")
+	list.add_item("0")
+	#31
+	list.add_item("gravity curve:")
+	list.add_item("0")
 
 func _process(delta):
 	if not self.visible: return
 
-	var list = $"VFlowContainer/ItemList"
+	var list = $"GridContainer/ItemList"
 	
 	if player:	
 		# 1
@@ -83,6 +96,10 @@ func _process(delta):
 		list.set_item_text(25, str(player.position.distance_to(player.center_of_gravity.position)))
 		# 27
 		list.set_item_text(27, angle2str(player.position.angle_to_point(player.center_of_gravity.position)))
+		# 29
+		list.set_item_text(29, str(player.gravity))
+		# 31
+		list.set_item_text(31, str(player.gravity_curve))
 	
 func vec2str(vec: Vector2) -> String:
 	return "(" + ("%4.2f" % vec.x) + ", " + ("%4.2f" % vec.y) + ")"
@@ -90,3 +107,15 @@ func vec2str(vec: Vector2) -> String:
 func angle2str(angle: float) -> String:
 	var ang_deg = "%4.2f" % rad2deg(angle)
 	return "%4.2f" % angle + " (" + ang_deg + "°)"
+
+
+func _on_ConfigGravityCurveSlider_value_changed(value):
+	if not player: return
+	
+	player.gravity_curve = value
+
+
+func _on_ConfigGravitySlider_value_changed(value):
+	if not player: return
+	
+	player.gravity = value

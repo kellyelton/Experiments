@@ -35,7 +35,7 @@ func new_game():
 	print("new game")
 	score = 0
 	$Player.start($SpawnPoint.position, $CenterOfGravity)
-	$CanvasLayer/DebugPanel.player = $Player
+	$CanvasLayer/DebugPanel.start($Player)
 	$StartTimer.start()
 
 func _on_StartTimer_timeout():

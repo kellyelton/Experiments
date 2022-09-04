@@ -118,30 +118,57 @@ shape = SubResource( 2 )
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="DebugPanel" type="Panel" parent="CanvasLayer"]
-anchor_right = 1.0
-margin_left = 10.0
-margin_top = 10.0
-margin_right = 10.0
-margin_bottom = 10.0
-size_flags_horizontal = 2
-size_flags_vertical = 2
+[node name="DebugPanel" type="PanelContainer" parent="CanvasLayer"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 7.0
+margin_bottom = 7.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = ExtResource( 5 )
 
-[node name="VFlowContainer" type="VFlowContainer" parent="CanvasLayer/DebugPanel"]
-margin_right = 40.0
-margin_bottom = 40.0
+[node name="Panel" type="Panel" parent="CanvasLayer/DebugPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 357.0
+margin_bottom = 56.0
+
+[node name="GridContainer" type="GridContainer" parent="CanvasLayer/DebugPanel"]
+margin_left = 7.0
+margin_top = 7.0
+margin_right = 357.0
+margin_bottom = 56.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ItemList" type="ItemList" parent="CanvasLayer/DebugPanel/VFlowContainer"]
+[node name="ItemList" type="ItemList" parent="CanvasLayer/DebugPanel/GridContainer"]
 margin_right = 350.0
 margin_bottom = 9.0
 rect_min_size = Vector2( 350, 0 )
-size_flags_horizontal = 2
+size_flags_horizontal = 3
 size_flags_vertical = 2
 auto_height = true
 max_columns = 2
 fixed_column_width = 150
 
+[node name="ConfigGravitySlider" type="HSlider" parent="CanvasLayer/DebugPanel/GridContainer"]
+margin_top = 13.0
+margin_right = 350.0
+margin_bottom = 29.0
+size_flags_horizontal = 3
+min_value = 0.001
+max_value = 500.0
+value = 0.001
+
+[node name="ConfigGravityCurveSlider" type="HSlider" parent="CanvasLayer/DebugPanel/GridContainer"]
+margin_top = 33.0
+margin_right = 350.0
+margin_bottom = 49.0
+size_flags_horizontal = 3
+min_value = 1.0
+max_value = 1000.0
+value = 1.0
+
 [connection signal="timeout" from="StartTimer" to="." method="_on_StartTimer_timeout"]
+[connection signal="value_changed" from="CanvasLayer/DebugPanel/GridContainer/ConfigGravitySlider" to="CanvasLayer/DebugPanel" method="_on_ConfigGravitySlider_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/DebugPanel/GridContainer/ConfigGravityCurveSlider" to="CanvasLayer/DebugPanel" method="_on_ConfigGravityCurveSlider_value_changed"]
