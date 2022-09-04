@@ -85,7 +85,6 @@ collision_mask = 3
 script = ExtResource( 2 )
 
 [node name="Particles2D" type="Particles2D" parent="."]
-visible = false
 amount = 2000
 lifetime = 20.0
 speed_scale = 6.0
@@ -95,7 +94,7 @@ process_material = SubResource( 8 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "walk"
-frame = 2
+frame = 1
 playing = true
 
 [node name="Particles2D2" type="Particles2D" parent="."]
