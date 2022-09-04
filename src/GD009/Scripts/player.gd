@@ -80,7 +80,7 @@ func _physics_process(delta):
 	if not is_on_ground:
 		var dist = self.position.distance_to(center_of_gravity.position)
 		var mod = gravity_curve / dist
-		physics_velocity.y = lerp(physics_velocity.y, gravity, (mod * gravity))
+		physics_velocity.y += (mod * gravity)
 
 	var combined_velocity\
 		= (input_move_velocity * speed) \
@@ -92,19 +92,13 @@ func _physics_process(delta):
 	var ta = position.angle_to_point(center_of_gravity.position) + deg2rad(90)
 
 	rotation = lerp_angle(rotation, ta, 0.2)
-	
-	if ta - target_rotation > PI:
-		pass#rotation  = ta
-	elif ta - target_rotation < -PI:
-		pass#rotation  = ta
-	else:
-		pass#rotation = lerp(rotation, ta, 0.2)
 		
 	target_rotation = ta
 	
 	var rotated_velocity = combined_velocity.rotated(self.rotation)
 	
-	var physics_velocity = move_and_slide(rotated_velocity, Vector2(0, -1).rotated(self.rotation))
+	var up = Vector2(0, -1).rotated(self.rotation)
+	move_and_slide(rotated_velocity, up).rotated(-self.rotation)
 
 	return	
 	#self.position += combined_velocity.rotated(self.rotation)
@@ -129,6 +123,7 @@ func _on_IsGroundedArea_body_entered(body):
 	if jumped:
 		print("landed")
 		jumped = false
+		physics_velocity.y = self.gravity
 	
 	#var bounce = (-10 * (physics_velocity.y / 5))
 	
