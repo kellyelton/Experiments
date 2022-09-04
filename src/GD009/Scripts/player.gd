@@ -1,8 +1,9 @@
 extends KinematicBody2D
 
-export var speed := 900
+export var speed := 300
 export var jump_power := 600
 export var gravity := 130
+export var gravity_curve := 10
 
 var screen_size
 
@@ -67,18 +68,18 @@ func _physics_process(delta):
 	
 	# calculate user input velocity
 	if input_moving:
-		input_move_velocity.x = lerp(input_move_velocity.x, input_direction, 0.25)
+		input_move_velocity.x = lerp(input_move_velocity.x, input_direction, 0.35)
 	else:
-		input_move_velocity.x = lerp(input_move_velocity.x, 0, 0.01)
+		input_move_velocity.x = lerp(input_move_velocity.x, 0, 0.02)
 	
 	if input_jumping:
 		input_jump_velocity.y = lerp(input_jump_velocity.y, -1, 0.3)
 	else:
-		input_jump_velocity.y = lerp(input_jump_velocity.y, 0, 0.05)
+		input_jump_velocity.y = lerp(input_jump_velocity.y, 0, 1.5)
 
 	if not is_on_ground:
 		var dist = self.position.distance_to(center_of_gravity.position)
-		var mod = 10.0 / dist
+		var mod = gravity_curve / dist
 		physics_velocity.y = lerp(physics_velocity.y, gravity, (mod * gravity))
 
 	var combined_velocity\
@@ -103,6 +104,9 @@ func _physics_process(delta):
 	
 	var rotated_velocity = combined_velocity.rotated(self.rotation)
 	
+	var physics_velocity = move_and_slide(rotated_velocity, Vector2(0, -1).rotated(self.rotation))
+
+	return	
 	#self.position += combined_velocity.rotated(self.rotation)
 
 	var collision = move_and_collide(rotated_velocity * delta)
