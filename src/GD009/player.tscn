@@ -73,15 +73,14 @@ animations = [ {
 } ]
 
 [sub_resource type="CapsuleShape2D" id=6]
-radius = 17.0
+radius = 14.0
 height = 0.0
 
 [sub_resource type="CapsuleShape2D" id=7]
-radius = 1.01399
-height = 19.972
+radius = 5.00699
+height = 13.986
 
 [node name="Player" type="KinematicBody2D"]
-collision_layer = 3
 collision_mask = 3
 script = ExtResource( 2 )
 
@@ -96,6 +95,7 @@ process_material = SubResource( 8 )
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 frames = SubResource( 1 )
 animation = "walk"
+frame = 2
 playing = true
 
 [node name="Particles2D2" type="Particles2D" parent="."]
@@ -106,7 +106,6 @@ local_coords = false
 process_material = SubResource( 8 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( 0, 2 )
 shape = SubResource( 6 )
 
 [node name="IsGroundedArea" type="Area2D" parent="."]
@@ -115,7 +114,7 @@ collision_mask = 2
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="IsGroundedArea"]
 modulate = Color( 1, 0, 0, 1 )
-position = Vector2( 1.33227e-15, 15 )
+position = Vector2( 1.33227e-15, 19 )
 rotation = -1.57313
 shape = SubResource( 7 )
 
