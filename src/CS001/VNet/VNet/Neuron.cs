@@ -84,11 +84,7 @@ public class Neuron
         _outputs.Add(output);
         output._inputs.Add(this);
 
-        var k = Math.Exp(weight);
-
-        k /= (1.0d + k);
-
-        _output_weights.Add(k);
+        _output_weights.Add(weight);
     }
 
     public void RemoveOutput(int output_index) {
