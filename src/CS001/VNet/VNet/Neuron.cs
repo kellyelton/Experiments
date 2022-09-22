@@ -19,6 +19,7 @@ public class Neuron
 
     private readonly List<Neuron> _outputs = new();
     private readonly List<double> _output_weights = new();
+    private readonly HashSet<long> _output_ids = new();
     private readonly List<Neuron> _inputs = new();
     private readonly List<double> _input_values = new();
 
@@ -78,7 +79,7 @@ public class Neuron
     }
 
     public void AddOutput(Neuron output, double weight) {
-        if (_outputs.Contains(output)) return;
+        if (!_output_ids.Add(output.Id)) return;
 
         _outputs.Add(output);
         output._inputs.Add(this);
@@ -96,6 +97,7 @@ public class Neuron
         var n = _outputs[output_index];
         _outputs.RemoveAt(output_index);
         _output_weights.RemoveAt(output_index);
+        _output_ids.Remove(n.Id);
 
         n._inputs.Remove(this);
     }
@@ -103,8 +105,12 @@ public class Neuron
     public void RetargetOutput(int output_index, Neuron new_target) {
         if (output_index < 0 || output_index >= _outputs.Count) throw new ArgumentOutOfRangeException(nameof(output_index), $"{nameof(output_index)} out of bounds");
 
+        if (!_output_ids.Add(new_target.Id)) return; // We already have an output to new_target
+
         var old_target = _outputs[output_index];
         old_target._inputs.Remove(this);
+
+        _output_ids.Remove(old_target.Id);
 
         _outputs[output_index] = new_target;
 
@@ -114,8 +120,12 @@ public class Neuron
     public void RerouteOutput(int output_index, Neuron new_neuron) {
         if (output_index < 0 || output_index >= _outputs.Count) throw new ArgumentOutOfRangeException(nameof(output_index), $"{nameof(output_index)} out of bounds");
 
+        if (!_output_ids.Add(new_neuron.Id)) return; // We already have an output to new_target
+
         var old_target = _outputs[output_index];
         old_target._inputs.Remove(this);
+
+        _output_ids.Remove(old_target.Id);
 
         _outputs[output_index] = new_neuron;
 
