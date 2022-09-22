@@ -36,28 +36,44 @@ public class Neuron
 
     public void Push(double v) {
         switch (Type) {
-            case NeuronType.Input:
-                Value = v;
+            case NeuronType.Input: {
+                    Value = v;
 
-                foreach (var output in _outputs) {
-                    output.Push(v);
+                    foreach (var output in _outputs) {
+                        output.Push(v);
+                    }
+
+                    break;
                 }
+            case NeuronType.Output: {
+                    _input_values.Add(v);
 
-                break;
-            case NeuronType.Output:
-                var k = Math.Exp(v);
+                    if (_input_values.Count != _inputs.Count) break;
 
-                Value = k / (1.0d + k);
-
-                break;
-            case NeuronType.Hidden:
-                _input_values.Add(v);
-
-                if (_input_values.Count == _inputs.Count) {
                     var sum = 0d;
                     for (var i = 0; i < _input_values.Count; i++) {
                         sum += _input_values[i];
                     }
+                    _input_values.Clear();
+
+                    var k = Math.Exp(sum);
+
+                    var sig = k / (1.0d + k);
+
+                    Value = sig;
+
+                    break;
+                }
+            case NeuronType.Hidden: {
+                    _input_values.Add(v);
+
+                    if (_input_values.Count != _inputs.Count) break;
+
+                    var sum = 0d;
+                    for (var i = 0; i < _input_values.Count; i++) {
+                        sum += _input_values[i];
+                    }
+                    _input_values.Clear();
 
                     Value = sum;
 
@@ -70,10 +86,8 @@ public class Neuron
                         o.Push(co);
                     }
 
-                    _input_values.Clear();
+                    break;
                 }
-
-                break;
             default: throw new InvalidOperationException($"Unexpected {nameof(NeuronType)} {Type}");
         }
     }
