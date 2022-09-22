@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.32912.340
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VNetApp", "VNetApp\VNetApp.csproj", "{B8C3C6CF-9785-4594-BA80-B894FA95B18D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VNet", "VNet\VNet.csproj", "{2D3B30FF-9155-4FCF-B5F6-C395B52BB21F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8C3C6CF-9785-4594-BA80-B894FA95B18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8C3C6CF-9785-4594-BA80-B894FA95B18D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8C3C6CF-9785-4594-BA80-B894FA95B18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8C3C6CF-9785-4594-BA80-B894FA95B18D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D3B30FF-9155-4FCF-B5F6-C395B52BB21F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D3B30FF-9155-4FCF-B5F6-C395B52BB21F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D3B30FF-9155-4FCF-B5F6-C395B52BB21F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D3B30FF-9155-4FCF-B5F6-C395B52BB21F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {732325E9-9376-4D8B-8CF8-78C4586F8EEF}
+	EndGlobalSection
+EndGlobal
