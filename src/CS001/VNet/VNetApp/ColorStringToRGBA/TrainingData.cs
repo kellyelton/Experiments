@@ -38,47 +38,47 @@ public record class TrainingData
             B = 1
         };
 
-        //yield return new TrainingData {
-        //    Name = "Black",
-        //    R = 0,
-        //    G = 0,
-        //    B = 0
-        //};
+        yield return new TrainingData {
+            Name = "Black",
+            R = 0,
+            G = 0,
+            B = 0
+        };
 
-        //yield return new TrainingData {
-        //    Name = "White",
-        //    R = 1,
-        //    G = 1,
-        //    B = 1
-        //};
+        yield return new TrainingData {
+            Name = "White",
+            R = 1,
+            G = 1,
+            B = 1
+        };
 
-        //yield return new TrainingData {
-        //    Name = "Yellow",
-        //    R = 1,
-        //    G = 216/255,
-        //    B = 0
-        //};
+        yield return new TrainingData {
+            Name = "Yellow",
+            R = 1,
+            G = 216 / 255,
+            B = 0
+        };
 
-        //yield return new TrainingData {
-        //    Name = "Orange",
-        //    R = 1,
-        //    G = 106/255,
-        //    B = 0
-        //};
+        yield return new TrainingData {
+            Name = "Orange",
+            R = 1,
+            G = 106 / 255,
+            B = 0
+        };
 
-        //yield return new TrainingData {
-        //    Name = "Purple",
-        //    R = 72/100,
-        //    G = 0,
-        //    B = 1
-        //};
+        yield return new TrainingData {
+            Name = "Purple",
+            R = 72 / 100,
+            G = 0,
+            B = 1
+        };
 
-        //yield return new TrainingData {
-        //    Name = "Pink",
-        //    R = 1,
-        //    G = 0,
-        //    B = 220/255
-        //};
+        yield return new TrainingData {
+            Name = "Pink",
+            R = 1,
+            G = 0,
+            B = 220 / 255
+        };
     }
 
     public static IEnumerable<TrainingData> Load_DataSet_2() {

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics.CodeAnalysis;
-
-namespace VNet;
+﻿namespace VNet;
 
 public class Net
 {
@@ -89,35 +86,6 @@ public class Net
 
             source.AddOutput(dest, weight);
         }
-
-        //for (var i = 0; i < rando_count; i++) {
-        //    var op = System.Random.Shared.Next(0, 3);
-
-        //    switch (op) {
-        //        case 0: { // Input -> Hidden
-        //                var input = Random(inputs);
-        //                var hidden = Random(hiddens);
-        //                var weight = System.Random.Shared.NextDouble();
-        //                input.AddOutput(hidden, weight);
-        //                break;
-        //            }
-        //        case 1: { // Hidden -> Hidden
-        //                var hidden1 = Random(hiddens);
-        //                var hidden2 = Random(hiddens);
-        //                var weight = System.Random.Shared.NextDouble();
-        //                hidden1.AddOutput(hidden2, weight);
-        //                break;
-        //            }
-        //        case 2: { // Hidden -> Output
-        //                var hidden = Random(hiddens);
-        //                var output = Random(outputs);
-        //                var weight = System.Random.Shared.NextDouble();
-        //                hidden.AddOutput(output, weight);
-        //                break;
-        //            }
-        //        default: throw new InvalidOperationException($"No op matching {op} handled");
-        //    }
-        //}
 
         var neurons = inputs.Concat(hiddens).Concat(outputs).ToArray();
 
