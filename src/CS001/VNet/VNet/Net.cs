@@ -31,7 +31,7 @@ public class Net
 
     public void Reset() {
         foreach (var n in Neurons) {
-            n.Reset();
+            n.ResetValue();
         }
     }
 
@@ -120,30 +120,50 @@ public class Net
         // Reconnect neurons
         {
             for (var i = 0; i < inputs.Length; i++) {
-                var input = inputs[i];
-                for (var o = 0; o < parent.InputNeurons[i].Outputs.Count; o++) {
-                    var output = parent.InputNeurons[i].Outputs[o];
+                var input_neuron = inputs[i];
+                var original_input_neuron = parent.InputNeurons[i];
 
-                    var dest_id = output.Id;
-                    var weight = parent.InputNeurons[i].OutputWeights[o];
+                for (var o = 0; o < original_input_neuron.Outputs.Count; o++) {
+                    var original_output_neuron = original_input_neuron.Outputs[o];
+
+                    var ix = -1;
+                    for (var yy = 0; yy < original_output_neuron.Inputs.Count; yy++) {
+                        if (original_output_neuron.Inputs[yy].Id == original_input_neuron.Id) {
+                            ix = yy;
+                            break;
+                        }
+                    }
+
+                    var dest_id = original_output_neuron.Id;
+                    var weight = original_output_neuron.InputWeights[ix];
 
                     var dest = lookup[dest_id];
 
-                    input.AddOutput(dest, weight);
+                    input_neuron.AddOutput(dest, weight);
                 }
             }
 
             for (var i = 0; i < hiddens.Count; i++) {
-                var hidden = hiddens[i];
-                for (var o = 0; o < parent.HiddenNeurons[i].Outputs.Count; o++) {
-                    var output = parent.HiddenNeurons[i].Outputs[o];
+                var input_neuron = hiddens[i];
+                var original_input_neuron = parent.HiddenNeurons[i];
 
-                    var dest_id = output.Id;
-                    var weight = parent.HiddenNeurons[i].OutputWeights[o];
+                for (var o = 0; o < original_input_neuron.Outputs.Count; o++) {
+                    var original_output_neuron = original_input_neuron.Outputs[o];
+
+                    var ix = -1;
+                    for (var yy = 0; yy < original_output_neuron.Inputs.Count; yy++) {
+                        if (original_output_neuron.Inputs[yy].Id == original_input_neuron.Id) {
+                            ix = yy;
+                            break;
+                        }
+                    }
+
+                    var dest_id = original_output_neuron.Id;
+                    var weight = original_output_neuron.InputWeights[ix];
 
                     var dest = lookup[dest_id];
 
-                    hidden.AddOutput(dest, weight);
+                    input_neuron.AddOutput(dest, weight);
                 }
             }
         }
@@ -187,7 +207,7 @@ public class Net
                 new_neuron.AddOutput(original_output_destination);
 
                 // Reroute the source output to the new neuron
-                source.RerouteOutput(output, new_neuron);
+                source.RetargetOutput(output, new_neuron);
             } else if (op < 0.2) { // Create new connection
                 var source = Random(inputs, hiddens);
                 var dest = Random(hiddens, outputs);
@@ -221,23 +241,24 @@ public class Net
 
                 n.RetargetOutput(o, no);
             } else { // Modify existing connection weight
-                var n = Random(inputs, hiddens);
-                if (n.Outputs.Count == 0) {
+                var n = Random(hiddens, outputs);
+                if (n.Inputs.Count == 0) {
                     i--;
                     continue;
                 }
-                var o = System.Random.Shared.Next(0, n.Outputs.Count);
-                var ow = n.OutputWeights[o];
+
+                var input_index = System.Random.Shared.Next(0, n.Inputs.Count);
+                var original_input_weight = n.InputWeights[input_index];
 
                 // random number between -0.1 and 0.1
                 var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 4;
 
-                var nw = ow + mod;
+                var new_input_weight = original_input_weight + mod;
 
-                if (nw < 0) nw = 1 + nw;
-                if (nw > 1) nw--;
+                if (new_input_weight < 0) new_input_weight = 1 + new_input_weight;
+                if (new_input_weight > 1) new_input_weight--;
 
-                n.AdjustOutput(o, nw);
+                n.AdjustInputWeight(input_index, new_input_weight);
             }
         }
 

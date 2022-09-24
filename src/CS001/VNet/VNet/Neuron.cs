@@ -11,17 +11,21 @@ public class Neuron
 
     public double Value { get; private set; }
 
+    public double Bias { get; set; }
+
     public IReadOnlyList<Neuron> Outputs => _outputs.AsReadOnly();
 
-    public IReadOnlyList<double> OutputWeights => _output_weights.AsReadOnly();
+    public IReadOnlyList<Neuron> Inputs => _inputs.AsReadOnly();
+
+    public IReadOnlyList<double> InputWeights => _input_weights.AsReadOnly();
 
     public bool HasInputs => Type == NeuronType.Input || _inputs.Count > 0;
 
     private readonly List<Neuron> _outputs = new();
-    private readonly List<double> _output_weights = new();
     private readonly HashSet<long> _output_ids = new();
     private readonly List<Neuron> _inputs = new();
     private readonly List<double> _input_values = new();
+    private readonly List<double> _input_weights = new();
 
     public Neuron(NeuronType type) {
         Type = type;
@@ -32,6 +36,7 @@ public class Neuron
 
         Type = source.Type;
         Id = source.Id;
+        Bias = source.Bias;
     }
 
     private static double Sig(double a) {
@@ -58,13 +63,19 @@ public class Neuron
 
                     if (_input_values.Count != _inputs.Count) break;
 
-                    var sum = 0d;
+                    var input_value = 0d;
                     for (var i = 0; i < _input_values.Count; i++) {
-                        sum += Sig(_input_values[i]);
+                        var iv = _input_values[i];
+                        var iw = _input_weights[i];
+                        input_value += (iv * iw);
                     }
                     _input_values.Clear();
 
-                    Value = sum;
+                    input_value += Bias;
+
+                    input_value = Sig(input_value);
+
+                    Value = input_value;
 
                     break;
                 }
@@ -73,21 +84,24 @@ public class Neuron
 
                     if (_input_values.Count != _inputs.Count) break;
 
-                    var sum = 0d;
+                    var input_value = 0d;
                     for (var i = 0; i < _input_values.Count; i++) {
-                        sum += Sig(_input_values[i]);
+                        var iv = _input_values[i];
+                        var iw = _input_weights[i];
+                        input_value += (iv * iw);
                     }
                     _input_values.Clear();
 
-                    Value = sum;
+                    input_value += Bias;
+
+                    input_value = Sig(input_value);
+
+                    Value = input_value;
 
                     for (var i = 0; i < _outputs.Count; i++) {
                         var o = _outputs[i];
-                        var w = _output_weights[i];
 
-                        var co = sum * w;
-
-                        o.Push(co);
+                        o.Push(Value);
                     }
 
                     break;
@@ -101,8 +115,7 @@ public class Neuron
 
         _outputs.Add(output);
         output._inputs.Add(this);
-
-        _output_weights.Add(Random.Shared.NextDouble() * 0.5);
+        output._input_weights.Add(Random.Shared.NextDouble());
     }
 
     public void AddOutput(Neuron output, double weight) {
@@ -110,8 +123,7 @@ public class Neuron
 
         _outputs.Add(output);
         output._inputs.Add(this);
-
-        _output_weights.Add(weight);
+        output._input_weights.Add(weight);
     }
 
     public void RemoveOutput(int output_index) {
@@ -119,10 +131,11 @@ public class Neuron
 
         var n = _outputs[output_index];
         _outputs.RemoveAt(output_index);
-        _output_weights.RemoveAt(output_index);
         _output_ids.Remove(n.Id);
 
-        n._inputs.Remove(this);
+        var ix = n._inputs.IndexOf(this);
+        n._inputs.RemoveAt(ix);
+        n._input_weights.RemoveAt(ix);
     }
 
     public void RetargetOutput(int output_index, Neuron new_target) {
@@ -131,28 +144,19 @@ public class Neuron
         if (!_output_ids.Add(new_target.Id)) return; // We already have an output to new_target
 
         var old_target = _outputs[output_index];
-        old_target._inputs.Remove(this);
+        var ix = old_target._inputs.IndexOf(this);
+
+        var old_weight = old_target._input_weights[ix];
+
+        old_target._inputs.RemoveAt(ix);
+        old_target._input_weights.RemoveAt(ix);
 
         _output_ids.Remove(old_target.Id);
 
         _outputs[output_index] = new_target;
 
         new_target._inputs.Add(this);
-    }
-
-    public void RerouteOutput(int output_index, Neuron new_neuron) {
-        if (output_index < 0 || output_index >= _outputs.Count) throw new ArgumentOutOfRangeException(nameof(output_index), $"{nameof(output_index)} out of bounds");
-
-        if (!_output_ids.Add(new_neuron.Id)) return; // We already have an output to new_target
-
-        var old_target = _outputs[output_index];
-        old_target._inputs.Remove(this);
-
-        _output_ids.Remove(old_target.Id);
-
-        _outputs[output_index] = new_neuron;
-
-        new_neuron._inputs.Add(this);
+        new_target._input_weights.Add(old_weight);
     }
 
     public void Disconnect() {
@@ -171,14 +175,14 @@ public class Neuron
         }
     }
 
-    public void AdjustOutput(int output_index, double weight) {
-        if (output_index < 0 || output_index >= _outputs.Count) throw new ArgumentOutOfRangeException(nameof(output_index), $"{nameof(output_index)} out of bounds");
-        if (weight < 0 || weight > 1) throw new ArgumentOutOfRangeException("weight must be between 0 and 1");
+    public void AdjustInputWeight(int input_index, double weight) {
+        if (input_index < 0 || input_index >= _input_weights.Count) throw new ArgumentOutOfRangeException(nameof(input_index), $"{nameof(input_index)} out of bounds");
+        if (weight is < 0 or > 1) throw new ArgumentOutOfRangeException("weight must be between 0 and 1");
 
-        _output_weights[output_index] = weight;
+        _input_weights[input_index] = weight;
     }
 
-    internal void Reset() {
+    internal void ResetValue() {
         Value = double.NaN;
         _input_values.Clear();
     }
