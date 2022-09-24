@@ -126,17 +126,17 @@ public class ProminentColorSmallViewModel : ViewModel
                 }
 
                 if (test_result.Score > best_brain.Score) {
-                    LogInfo("New 1st Place Record: " + test_result.Score + " gen-" + test_result.Net.Generation);
+                    LogInfo("New 1st Place Record: " + test_result.Score + " gen-" + test_result.Net.Generation + ": " + test_result.Net.Neurons.Length + "x" + test_result.Net.Neurons.Sum(n => n.Outputs.Count));
                     best_brain_2 = best_brain;
 
                     best_brain = test_result.Net;
                 } else if (test_result.Score > best_brain_2.Score) {
-                    LogInfo("New 2nd Place Record: " + test_result.Score + " gen-" + test_result.Net.Generation);
+                    LogInfo("New 2nd Place Record: " + test_result.Score + " gen-" + test_result.Net.Generation + ": " + test_result.Net.Neurons.Length + "x" + test_result.Net.Neurons.Sum(n => n.Outputs.Count));
                     best_brain_2 = test_result.Net;
                 }
 
                 if (test_result.Score > Best_Score) {
-                    LogInfo("New Mega Best: " + test_result.Score + " gen-" + test_result.Net.Generation);
+                    LogInfo("New Mega Best: " + test_result.Score + " gen-" + test_result.Net.Generation + ": " + test_result.Net.Neurons.Length + "x" + test_result.Net.Neurons.Sum(n => n.Outputs.Count));
                     Best = test_result.Net;
                     Best_Score = test_result.Score;
                 }
@@ -147,7 +147,7 @@ public class ProminentColorSmallViewModel : ViewModel
             }
         }
 
-        LogInfo($"Best Score: {best_brain.Score} gen-{best_brain.Generation}");
+        LogInfo($"Best Score: {best_brain.Score} gen-{best_brain.Generation}" + ": " + best_brain.Neurons.Length + "x" + best_brain.Neurons.Sum(n => n.Outputs.Count));
 
         var ops = new JsonSerializerOptions() {
             WriteIndented = true
