@@ -82,7 +82,7 @@ public class ProminentColorSmallViewModel : ViewModel
     protected virtual void Train2(CancellationToken cancellation) {
         cancellation.ThrowIfCancellationRequested();
 
-        const int runs = 10000;
+        const int runs = 1000 * 5;
 
         var best_brains = new SortedSet<Net>(DescendingScore);
 
@@ -94,7 +94,7 @@ public class ProminentColorSmallViewModel : ViewModel
 
         for (var i = 0; i < runs; i++) {
             var tasks = Enumerable
-                .Range(0, 500)
+                .Range(0, 1000)
                 .Select(_ => {
                     if (best_brains.Count > 10 && Random.Shared.NextDouble() > 0.1) {
                         var ri = Random.Shared.Next(0, best_brains.Count);
