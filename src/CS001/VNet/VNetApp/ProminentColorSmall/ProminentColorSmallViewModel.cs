@@ -170,18 +170,18 @@ public class ProminentColorSmallViewModel : ViewModel
 
         var scores = new List<double>();
 
-        var ca = 0;
-        var cb = 0;
+        var c_zero = 0;
+        var c_one = 0;
+        var c_two = 0;
         foreach (var data in training_data) {
             var r = RunPrediction(net, data.Inputs);
 
             if (r == data.ExpectedResult) {
                 scores.Add(1);
-                if (r == 1) {
-                    ca++;
-                } else if (r == 2) {
-                    cb++;
-                } else throw new InvalidOperationException("hafl");
+                if (r == 0) c_zero++;
+                else if (r == 1) c_one++;
+                else if (r == 2) c_two++;
+                else throw new InvalidOperationException("hafl");
             } else {
                 scores.Add(0);
             }
@@ -189,8 +189,8 @@ public class ProminentColorSmallViewModel : ViewModel
 
         var avg_score = scores.Average();
 
-        if (ca == 0 || cb == 0)
-            avg_score = 0;
+        if (c_zero == 0 && c_one == 0 || c_zero == 0 && c_two == 0 || c_one == 0 && c_two == 0)
+            avg_score /= 10;
 
         var total_score = (int)(1000 * avg_score);
 
