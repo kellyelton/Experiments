@@ -52,6 +52,11 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="Prediction"/>
+                <TabItem Header="Settings">
+                    <WrapPanel Margin="10">
+                        <CheckBox Content="Hibernate after training" x:Name="Setting_CheckBox_HibernateAfterTraining" Checked="Setting_CheckBox_HibernateAfterTraining_Checked" Unchecked="Setting_CheckBox_HibernateAfterTraining_Unchecked"/>
+                    </WrapPanel>
+                </TabItem>
             </TabControl>
         </Grid>
 

@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
@@ -17,6 +19,7 @@ public partial class ProminentColorSmallWindow : Window
     public static readonly DependencyProperty ViewModelProperty =
         DependencyProperty.Register(nameof(ViewModel), typeof(ProminentColorSmallViewModel), typeof(ProminentColorSmallWindow), new PropertyMetadata(null));
 
+    private bool _hibernate_after_training = false;
 
     private readonly int[][] _grid;
     private readonly Rectangle[][] _grid_rectangles;
@@ -25,13 +28,15 @@ public partial class ProminentColorSmallWindow : Window
     private readonly double cell_height;
 
     public ProminentColorSmallWindow() {
-        ViewModel = new ProminentColorSmallViewModel(3, 3);
+        ViewModel = new ProminentColorSmallViewModel(1, 3);
         ViewModel.LogEvent += ViewModel_LogEvent;
 
         _grid = new int[ViewModel.Columns][];
         _grid_rectangles = new Rectangle[ViewModel.Columns][];
 
         InitializeComponent();
+
+        Setting_CheckBox_HibernateAfterTraining.IsChecked = _hibernate_after_training;
 
         cell_width = 30 / ViewModel.Columns;
         cell_height = 30 / ViewModel.Rows;
@@ -75,6 +80,36 @@ public partial class ProminentColorSmallWindow : Window
         }
 
         await ViewModel.Train(CancellationToken.None);
+
+        await HibernateIfRequested();
+    }
+
+    private async Task HibernateIfRequested() {
+        if (!_hibernate_after_training) return;
+
+        ViewModel_LogEvent(this, "Triggering system hibernation");
+
+        await Task.Delay(1000);
+
+        try {
+            var psi = new ProcessStartInfo("shutdown", "/h") {
+                RedirectStandardOutput = true
+            };
+
+            using var proc = Process.Start(psi);
+
+            var str = proc.StandardOutput.ReadToEnd();
+
+            ViewModel_LogEvent(this, str);
+
+            proc.WaitForExit();
+
+            if (proc.ExitCode != 0) {
+                ViewModel_LogEvent(this, $"Error hibernating: \"{psi.FileName} {psi.Arguments}\" returned a non-zero exit code {proc.ExitCode}");
+            }
+        } catch (Exception ex) {
+            ViewModel_LogEvent(this, "Error hibernating: " + Environment.NewLine + ex.ToString());
+        }
     }
 
     private void TryColorInputCanvas_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e) {
@@ -114,5 +149,13 @@ public partial class ProminentColorSmallWindow : Window
             throw new InvalidOperationException($"Invalid result {result}");
         }
         TryColorResultBorder.InvalidateVisual();
+    }
+
+    private void Setting_CheckBox_HibernateAfterTraining_Checked(object sender, RoutedEventArgs e) {
+        _hibernate_after_training = true;
+    }
+
+    private void Setting_CheckBox_HibernateAfterTraining_Unchecked(object sender, RoutedEventArgs e) {
+        _hibernate_after_training = false;
     }
 }
