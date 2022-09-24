@@ -151,7 +151,7 @@ public class Net
         }
 
 
-        var mutation_count = System.Random.Shared.Next(0, 1000);
+        var mutation_count = System.Random.Shared.Next(0, lookup.Count + all.Sum(a => a.Outputs.Count)) * 2;
 
         for (var i = 0; i < mutation_count; i++) {
             var op = System.Random.Shared.NextDouble();
