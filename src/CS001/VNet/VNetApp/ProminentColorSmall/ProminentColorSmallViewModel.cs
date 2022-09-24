@@ -9,6 +9,10 @@ namespace VNetApp.ProminentColorSmall;
 
 public class ProminentColorSmallViewModel : ViewModel
 {
+    public event EventHandler<Net> NewHighestScore;
+    public event EventHandler<Net> NewHighScore;
+
+
     public double CurrentConfidence {
         get => _confidence;
         set => SetAndNotify(ref _confidence, value);
@@ -118,6 +122,8 @@ public class ProminentColorSmallViewModel : ViewModel
 
                 if (test_result.Score > best_brains.Min(b => b.Score)) {
                     best_brains.Add(test_result.Net);
+
+                    Fire_NewHighScore(test_result.Net);
                 }
 
                 while (best_brains.Count > 100) {
@@ -130,6 +136,8 @@ public class ProminentColorSmallViewModel : ViewModel
                     best_brain_2 = best_brain;
 
                     best_brain = test_result.Net;
+
+                    Fire_NewHighestScore(test_result.Net);
                 } else if (test_result.Score > best_brain_2.Score) {
                     LogInfo("New 2nd Place Record: " + test_result.Score + " gen-" + test_result.Net.Generation + ": " + test_result.Net.Neurons.Length + "x" + test_result.Net.Neurons.Sum(n => n.Outputs.Count));
                     best_brain_2 = test_result.Net;
@@ -254,5 +262,29 @@ public class ProminentColorSmallViewModel : ViewModel
 
     protected virtual Net MutateNets(Net parenta, Net parentb) {
         throw new NotImplementedException();
+    }
+
+    protected virtual void Fire_NewHighScore(Net net) {
+        Task.Run(() => {
+            var handlers = NewHighScore?.GetInvocationList() ?? Array.Empty<EventHandler>();
+
+            foreach (var handler in handlers.Cast<EventHandler<Net>>()) {
+                try {
+                    handler.Invoke(this, net);
+                } catch { }
+            }
+        });
+    }
+
+    protected virtual void Fire_NewHighestScore(Net net) {
+        Task.Run(() => {
+            var handlers = NewHighestScore?.GetInvocationList() ?? Array.Empty<EventHandler>();
+
+            foreach (var handler in handlers.Cast<EventHandler<Net>>()) {
+                try {
+                    handler.Invoke(this, net);
+                } catch { }
+            }
+        });
     }
 }
