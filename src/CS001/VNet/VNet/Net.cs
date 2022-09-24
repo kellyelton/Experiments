@@ -251,7 +251,7 @@ public class Net
                 var original_input_weight = n.InputWeights[input_index];
 
                 // random number between -0.1 and 0.1
-                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 4;
+                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 10;
 
                 var new_input_weight = original_input_weight + mod;
 
