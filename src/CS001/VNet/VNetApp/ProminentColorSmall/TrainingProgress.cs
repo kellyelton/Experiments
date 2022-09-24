@@ -2,7 +2,7 @@
 
 public struct TrainingProgress
 {
-    public double Progress = double.NaN;
+    public int Progress = -1;
 
     public int MaxProgress = -1;
 
