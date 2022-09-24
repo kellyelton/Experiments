@@ -244,6 +244,20 @@ public class Net
                 var no = Random(hiddens, outputs);
 
                 n.RetargetOutput(o, no);
+            } else if (op < 0.64) { // Modify existing neuron bias
+                var n = Random(hiddens, outputs);
+
+                var original_bias = n.Bias;
+
+                // random number between -0.1 and 0.1
+                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 10;
+
+                var new_bias = original_bias + mod;
+
+                if (new_bias < -1) new_bias = 1 + new_bias;
+                if (new_bias > 1) new_bias--;
+
+                n.Bias = new_bias;
             } else { // Modify existing connection weight
                 var n = Random(hiddens, outputs);
                 if (n.Inputs.Count == 0) {
