@@ -30,6 +30,9 @@ public partial class ProminentColorSmallWindow : Window
     public ProminentColorSmallWindow() {
         ViewModel = new ProminentColorSmallViewModel(1, 3);
         ViewModel.LogEvent += ViewModel_LogEvent;
+        ViewModel.NewHighScore += ViewModel_NewHighScore;
+        ViewModel.NewHighestScore += ViewModel_NewHighestScore;
+        ViewModel.TrainingProgress += ViewModel_TrainingProgress;
 
         _grid = new int[ViewModel.Columns][];
         _grid_rectangles = new Rectangle[ViewModel.Columns][];
@@ -62,6 +65,43 @@ public partial class ProminentColorSmallWindow : Window
                 _grid_rectangles[x][y] = rect;
             }
         }
+    }
+
+    private void ViewModel_TrainingProgress(object? sender, TrainingProgress e) {
+        Dispatcher.InvokeAsync(() => {
+            var myEllipse = new Ellipse {
+                Fill = Brushes.DarkSlateBlue,
+                StrokeThickness = 1,
+                Stroke = Brushes.DarkSlateBlue,
+                Width = 1,
+                Height = 1
+            };
+
+            var progress_percent = e.Progress / (double)e.MaxProgress;
+
+            var x = ScoreGraph.ActualWidth * progress_percent;
+
+            var highest_score_percent = _highestscore / (double)ViewModel.MaxHighScore;
+
+            var y = ScoreGraph.ActualHeight * highest_score_percent;
+            y = ScoreGraph.ActualHeight - y;
+
+            Canvas.SetTop(myEllipse, y);
+            Canvas.SetLeft(myEllipse, x);
+
+            ScoreGraph.Children.Add(myEllipse);
+        });
+    }
+
+    private int _highestscore;
+    private int _highscore;
+
+    private void ViewModel_NewHighestScore(object? sender, Net e) {
+        _highestscore = e.Score;
+    }
+
+    private void ViewModel_NewHighScore(object? sender, Net e) {
+        _highscore = e.Score;
     }
 
     private void ViewModel_LogEvent(object? sender, string e) {

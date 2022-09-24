@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:VNetApp.ProminentColorSmall"
         mc:Ignorable="d"
-        Title="Prominent Color Small" Height="450" Width="800"
+        Title="Prominent Color Small" Height="700" Width="1000"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}, Path=ViewModel}"
         >
     <Grid>
@@ -26,8 +26,8 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <GroupBox Header="Training..." Grid.Row="0" Grid.Column="0" Padding="5">
-                            <Border BorderBrush="#111" BorderThickness="0.2" CornerRadius="0.5" Background="#FEFEFF" Padding="1">
-                                <Canvas Height="100" x:Name="ScoreGraph"/>
+                            <Border BorderBrush="#111" BorderThickness="0.2" CornerRadius="0.5" Background="#FEFEFF" Padding="1" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                <Canvas Height="100" Width="300" x:Name="ScoreGraph"/>
                             </Border>
                         </GroupBox>
                         <GroupBox Header="Try" Grid.Row="0" Grid.Column="2" Padding="5">

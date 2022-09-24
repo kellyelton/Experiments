@@ -159,10 +159,6 @@ public class ProminentColorSmallViewModel : ViewModel
             progress.Progress = i;
 
             Fire_TrainingProgress(progress);
-
-            //if ((i % 500) == 0) {
-            //    LogInfo($"{i}/{runs}");
-            //}
         }
 
         LogInfo($"Best Score: {best_brain.Score} gen-{best_brain.Generation}" + ": " + best_brain.Neurons.Length + "x" + best_brain.Neurons.Sum(n => n.Outputs.Count));
