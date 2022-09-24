@@ -105,7 +105,7 @@ public partial class ProminentColorSmallWindow : Window
         if (result == -1) {
             TryColorResultBorder.Background = Brushes.Red;
         } else if (result == 0) {
-            TryColorResultBorder.Background = Brushes.DimGray;
+            TryColorResultBorder.Background = Brushes.LightGray;
         } else if (result == 1) {
             TryColorResultBorder.Background = Brushes.White;
         } else if (result == 2) {
