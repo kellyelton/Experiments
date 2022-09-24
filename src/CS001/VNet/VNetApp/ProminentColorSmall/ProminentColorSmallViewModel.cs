@@ -184,7 +184,7 @@ public class ProminentColorSmallViewModel : ViewModel
         var avg_score = scores.Average();
 
         if (ca == 0 || cb == 0)
-            avg_score /= 10;
+            avg_score = 0;
 
         var total_score = (int)(1000 * avg_score);
 
