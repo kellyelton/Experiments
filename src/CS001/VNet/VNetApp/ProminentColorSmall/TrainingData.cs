@@ -21,8 +21,15 @@ public class TrainingData
         var two_count = 0;
         var buffer_length = 0;
         var buffer = new double[total_cells];
+        var last_val = 2;
         for (var i = 0; i < total_iterations; i++) {
-            var val = Random.Shared.Next(1, 3);
+            int val;
+            if (last_val == 2) {
+                val = 1;
+            } else if (last_val == 1) {
+                val = 2;
+            } else throw new InvalidOperationException("invalid last val");
+
             if (val == 1) {
                 one_count++;
             } else {
