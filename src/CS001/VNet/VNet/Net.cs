@@ -50,10 +50,8 @@ public class Net
         return OutputNeurons.Select(o => o.Value).ToArray();
     }
 
-    public static Net Random() {
-        var input_count = 32;
-        var output_count = 3;
-        var hidden_count = System.Random.Shared.Next(5, 1000);
+    public static Net Random(int input_count, int output_count, int max_hidden_count) {
+        var hidden_count = System.Random.Shared.Next(2, max_hidden_count);
 
         var inputs = Enumerable.Range(0, input_count).Select(_ => new Neuron(NeuronType.Input)).ToArray();
         var outputs = Enumerable.Range(0, output_count).Select(_ => new Neuron(NeuronType.Output)).ToArray();
