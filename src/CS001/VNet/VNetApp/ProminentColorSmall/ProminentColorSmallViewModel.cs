@@ -11,6 +11,7 @@ public class ProminentColorSmallViewModel : ViewModel
 {
     public event EventHandler<Net> NewHighestScore;
     public event EventHandler<Net> NewHighScore;
+    public event EventHandler<TrainingProgress> TrainingProgress;
 
 
     public double CurrentConfidence {
@@ -96,6 +97,10 @@ public class ProminentColorSmallViewModel : ViewModel
         best_brains.Add(best_brain);
         best_brains.Add(best_brain_2);
 
+        var progress = new TrainingProgress(runs);
+
+        Fire_TrainingProgress(progress);
+
         for (var i = 0; i < runs; i++) {
             var tasks = Enumerable
                 .Range(0, 1000)
@@ -150,9 +155,13 @@ public class ProminentColorSmallViewModel : ViewModel
                 }
             }
 
-            if ((i % 500) == 0) {
-                LogInfo($"{i}/{runs}");
-            }
+            progress.Progress = i;
+
+            Fire_TrainingProgress(progress);
+
+            //if ((i % 500) == 0) {
+            //    LogInfo($"{i}/{runs}");
+            //}
         }
 
         LogInfo($"Best Score: {best_brain.Score} gen-{best_brain.Generation}" + ": " + best_brain.Neurons.Length + "x" + best_brain.Neurons.Sum(n => n.Outputs.Count));
@@ -286,5 +295,11 @@ public class ProminentColorSmallViewModel : ViewModel
                 } catch { }
             }
         });
+    }
+
+    protected virtual void Fire_TrainingProgress(TrainingProgress progress) {
+        try {
+            TrainingProgress?.Invoke(this, progress);
+        } catch { }
     }
 }
