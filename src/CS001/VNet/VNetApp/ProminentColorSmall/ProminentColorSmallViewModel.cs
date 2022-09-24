@@ -13,7 +13,6 @@ public class ProminentColorSmallViewModel : ViewModel
     public event EventHandler<Net> NewHighScore;
     public event EventHandler<TrainingProgress> TrainingProgress;
 
-
     public double CurrentConfidence {
         get => _confidence;
         set => SetAndNotify(ref _confidence, value);
@@ -87,7 +86,7 @@ public class ProminentColorSmallViewModel : ViewModel
     protected virtual void Train2(CancellationToken cancellation) {
         cancellation.ThrowIfCancellationRequested();
 
-        const int runs = 1000 * 5;
+        const int runs = 1000 * 50;
 
         var best_brains = new SortedSet<Net>(DescendingScore);
 
@@ -103,7 +102,7 @@ public class ProminentColorSmallViewModel : ViewModel
 
         for (var i = 0; i < runs; i++) {
             var tasks = Enumerable
-                .Range(0, 1000)
+                .Range(0, 100)
                 .Select(_ => {
                     if (best_brains.Count > 10 && Random.Shared.NextDouble() > 0.1) {
                         var ri = Random.Shared.Next(0, best_brains.Count);
