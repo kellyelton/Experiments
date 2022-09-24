@@ -28,18 +28,18 @@ public partial class ProminentColorSmallWindow : Window
         ViewModel = new ProminentColorSmallViewModel(3, 3);
         ViewModel.LogEvent += ViewModel_LogEvent;
 
-        _grid = new int[ViewModel.Rows][];
-        _grid_rectangles = new Rectangle[ViewModel.Rows][];
+        _grid = new int[ViewModel.Columns][];
+        _grid_rectangles = new Rectangle[ViewModel.Columns][];
 
         InitializeComponent();
 
-        cell_width = 30 / ViewModel.Rows;
-        cell_height = 30 / ViewModel.Columns;
+        cell_width = 30 / ViewModel.Columns;
+        cell_height = 30 / ViewModel.Rows;
 
-        for (int x = 0; x < ViewModel.Rows; x++) {
-            _grid[x] = new int[ViewModel.Columns];
-            _grid_rectangles[x] = new Rectangle[ViewModel.Columns];
-            for (var y = 0; y < ViewModel.Columns; y++) {
+        for (int x = 0; x < ViewModel.Columns; x++) {
+            _grid[x] = new int[ViewModel.Rows];
+            _grid_rectangles[x] = new Rectangle[ViewModel.Rows];
+            for (var y = 0; y < ViewModel.Rows; y++) {
                 _grid[x][y] = 1;
                 var rect = new Rectangle();
                 rect.Width = cell_width;
