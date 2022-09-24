@@ -239,7 +239,8 @@ public class Net
 
                 var nw = ow + mod;
 
-                if (nw < 0 || nw > 1) nw = ow - mod;
+                if (nw < 0) nw = 1 + nw;
+                if (nw > 1) nw--;
 
                 n.AdjustOutput(o, nw);
             }
