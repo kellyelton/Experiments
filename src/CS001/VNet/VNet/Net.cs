@@ -255,7 +255,7 @@ public class Net
 
                 var new_input_weight = original_input_weight + mod;
 
-                if (new_input_weight < 0) new_input_weight = 1 + new_input_weight;
+                if (new_input_weight < -1) new_input_weight = 1 + new_input_weight;
                 if (new_input_weight > 1) new_input_weight--;
 
                 n.AdjustInputWeight(input_index, new_input_weight);
