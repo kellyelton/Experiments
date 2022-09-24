@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 
 namespace VNetApp.ProminentColorSmall;
 
@@ -23,7 +22,14 @@ public class TrainingData
         var buffer_length = 0;
         var buffer = new double[total_cells];
         for (var i = 0; i < total_iterations; i++) {
-            buffer[buffer_length++] = Random.Shared.Next(1, 3);
+            var val = Random.Shared.Next(1, 3);
+            if (val == 1) {
+                one_count++;
+            } else {
+                two_count++;
+            }
+
+            buffer[buffer_length++] = val;
 
             if (buffer_length == total_cells) {
                 int expected_result;
