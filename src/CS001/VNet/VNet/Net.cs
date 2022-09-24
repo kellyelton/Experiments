@@ -61,7 +61,7 @@ public class Net
         var outputs = Enumerable.Range(0, output_count).Select(_ => new Neuron(NeuronType.Output)).ToArray();
         var hiddens = Enumerable.Range(0, hidden_count).Select(_ => new Neuron(NeuronType.Hidden)).ToArray();
 
-        var rando_count = System.Random.Shared.Next(hidden_count * 2, hidden_count * 100);
+        var rando_count = System.Random.Shared.Next(0, (hidden_count + input_count) * (hidden_count + input_count));
         //var rando_count = System.Random.Shared.Next((hidden_count * hidden_count) / 4, (hidden_count * hidden_count));
 
         var dests = hiddens.Concat(outputs).ToArray();
