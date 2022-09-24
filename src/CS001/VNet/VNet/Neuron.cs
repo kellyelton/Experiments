@@ -175,7 +175,7 @@ public class Neuron
     }
 
     internal void Reset() {
-        Value = 0;
+        Value = double.NaN;
         _input_values.Clear();
     }
 }
