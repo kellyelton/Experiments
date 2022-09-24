@@ -21,23 +21,29 @@ public partial class ProminentColorSmallWindow : Window
     private readonly int[][] _grid;
     private readonly Rectangle[][] _grid_rectangles;
 
+    private readonly double cell_width;
+    private readonly double cell_height;
+
     public ProminentColorSmallWindow() {
         ViewModel = new ProminentColorSmallViewModel(3, 3);
         ViewModel.LogEvent += ViewModel_LogEvent;
 
-        _grid = new int[3][];
-        _grid_rectangles = new Rectangle[3][];
+        _grid = new int[ViewModel.Rows][];
+        _grid_rectangles = new Rectangle[ViewModel.Rows][];
 
         InitializeComponent();
 
-        for (int x = 0; x < 3; x++) {
-            _grid[x] = new int[3];
-            _grid_rectangles[x] = new Rectangle[3];
-            for (var y = 0; y < 3; y++) {
+        cell_width = 30 / ViewModel.Rows;
+        cell_height = 30 / ViewModel.Columns;
+
+        for (int x = 0; x < ViewModel.Rows; x++) {
+            _grid[x] = new int[ViewModel.Columns];
+            _grid_rectangles[x] = new Rectangle[ViewModel.Columns];
+            for (var y = 0; y < ViewModel.Columns; y++) {
                 _grid[x][y] = 1;
                 var rect = new Rectangle();
-                rect.Width = 10;
-                rect.Height = 10;
+                rect.Width = cell_width;
+                rect.Height = cell_height;
                 rect.Fill = Brushes.White;
 
                 TryColorInputCanvas.Children.Add(rect);
@@ -79,8 +85,8 @@ public partial class ProminentColorSmallWindow : Window
 
         if (mx < 0 || my < 0) return;
 
-        var x = (int)Math.Floor(mx / 10);
-        var y = (int)Math.Floor(my / 10);
+        var x = (int)Math.Floor(mx / cell_width);
+        var y = (int)Math.Floor(my / cell_height);
 
         var current_value = _grid[x][y];
         var rect = _grid_rectangles[x][y];
