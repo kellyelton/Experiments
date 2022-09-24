@@ -193,6 +193,8 @@ public class ProminentColorSmallViewModel : ViewModel
 
         var total_score = (int)(1000 * avg_score);
 
+        total_score = Math.Max(0, total_score - net.Neurons.Length + net.Neurons.Sum(n => n.Outputs.Count));
+
         net.Score = total_score;
 
         return total_score;
