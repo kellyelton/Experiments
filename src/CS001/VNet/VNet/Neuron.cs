@@ -34,6 +34,14 @@ public class Neuron
         Id = source.Id;
     }
 
+    private static double Sig(double a) {
+        var k = Math.Exp(a);
+
+        var sig = k / (1.0d + k);
+
+        return sig;
+    }
+
     public void Push(double v) {
         switch (Type) {
             case NeuronType.Input: {
@@ -52,15 +60,11 @@ public class Neuron
 
                     var sum = 0d;
                     for (var i = 0; i < _input_values.Count; i++) {
-                        sum += _input_values[i];
+                        sum += Sig(_input_values[i]);
                     }
                     _input_values.Clear();
 
-                    var k = Math.Exp(sum);
-
-                    var sig = k / (1.0d + k);
-
-                    Value = sig;
+                    Value = sum;
 
                     break;
                 }
@@ -71,7 +75,7 @@ public class Neuron
 
                     var sum = 0d;
                     for (var i = 0; i < _input_values.Count; i++) {
-                        sum += _input_values[i];
+                        sum += Sig(_input_values[i]);
                     }
                     _input_values.Clear();
 
