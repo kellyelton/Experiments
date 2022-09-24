@@ -4,6 +4,8 @@ public class Net
 {
     public int Generation { get; private init; } = 1;
 
+    public int Score { get; set; }
+
     public Neuron[] InputNeurons { get; }
 
     public Neuron[] OutputNeurons { get; }
