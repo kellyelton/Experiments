@@ -219,15 +219,17 @@ public class ProminentColorSmallViewModel : ViewModel
         var a = false;
         var b = false;
 
-        if (double.IsNaN(outputs[0]) == false && outputs[0] > 0) {
+        if (double.IsNaN(outputs[0]) == false && outputs[0] > 0.5) {
             a = true;
         }
 
-        if (double.IsNaN(outputs[1]) == false && outputs[1] > 0) {
+        if (double.IsNaN(outputs[1]) == false && outputs[1] > 0.5) {
             b = true;
         }
 
-        if (a == b) return 0;
+        if (a && b) return 0;
+
+        if (a == b) return -1;
 
         if (a) return 1;
 
