@@ -29,6 +29,8 @@ public class ProminentColorSmallViewModel : ViewModel
 
     public int Best_Score { get; set; } = 0;
 
+    public int MaxHighScore { get; } = 5000;
+
     public int Rows { get; }
 
     public int Columns { get; }
@@ -207,7 +209,7 @@ public class ProminentColorSmallViewModel : ViewModel
         if (c_zero == 0 && c_one == 0 || c_zero == 0 && c_two == 0 || c_one == 0 && c_two == 0)
             avg_score /= 10;
 
-        var total_score = (int)(5000 * avg_score);
+        var total_score = (int)(MaxHighScore * avg_score);
         var size_deduction = Math.Min(40, net.Size);
 
         total_score -= size_deduction;
