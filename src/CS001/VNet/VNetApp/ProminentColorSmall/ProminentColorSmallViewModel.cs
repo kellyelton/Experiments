@@ -243,7 +243,9 @@ public class ProminentColorSmallViewModel : ViewModel
     }
 
     protected virtual Net CreateNet() {
-        return Net.Random(Rows * Columns, 2, 40);
+        var net = Net.Random(Rows * Columns, 2, 30);
+
+        return net;
     }
 
     protected virtual Net MutateNet(Net parent) {
