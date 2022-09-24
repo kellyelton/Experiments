@@ -92,6 +92,15 @@ public class Neuron
         }
     }
 
+    public void AddOutput(Neuron output) {
+        if (!_output_ids.Add(output.Id)) return;
+
+        _outputs.Add(output);
+        output._inputs.Add(this);
+
+        _output_weights.Add(Random.Shared.NextDouble() * 0.5);
+    }
+
     public void AddOutput(Neuron output, double weight) {
         if (!_output_ids.Add(output.Id)) return;
 
