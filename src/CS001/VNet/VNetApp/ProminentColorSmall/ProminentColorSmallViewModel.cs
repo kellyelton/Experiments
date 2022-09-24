@@ -26,11 +26,17 @@ public class ProminentColorSmallViewModel : ViewModel
 
     public int Best_Score { get; set; } = 0;
 
+    public int Rows { get; }
+
+    public int Columns { get; }
+
     private double _confidence;
     private bool _isTraining;
 
-    public ProminentColorSmallViewModel() {
+    public ProminentColorSmallViewModel(int grid_rows, int grid_columns) {
         Best = CreateNet();
+        Rows = grid_rows;
+        Columns = grid_columns;
     }
 
     public async Task Train(CancellationToken cancellation) {
@@ -160,7 +166,7 @@ public class ProminentColorSmallViewModel : ViewModel
     }
 
     protected virtual int TestNet(Net net) {
-        var training_data = TrainingData.Load_DataSet_1().ToArray();
+        var training_data = TrainingData.Load_DataSet_1(Rows, Columns, 100);
 
         var scores = new List<double>();
 
@@ -231,7 +237,7 @@ public class ProminentColorSmallViewModel : ViewModel
     }
 
     protected virtual Net CreateNet() {
-        return Net.Random(3 * 3, 2, 40);
+        return Net.Random(Rows * Columns, 2, 40);
     }
 
     protected virtual Net MutateNet(Net parent) {

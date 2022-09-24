@@ -22,7 +22,7 @@ public partial class ProminentColorSmallWindow : Window
     private readonly Rectangle[][] _grid_rectangles;
 
     public ProminentColorSmallWindow() {
-        ViewModel = new ProminentColorSmallViewModel();
+        ViewModel = new ProminentColorSmallViewModel(3, 3);
         ViewModel.LogEvent += ViewModel_LogEvent;
 
         _grid = new int[3][];
