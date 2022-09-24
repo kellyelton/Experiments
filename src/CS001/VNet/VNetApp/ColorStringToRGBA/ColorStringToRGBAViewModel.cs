@@ -30,7 +30,7 @@ public partial class ColorStringToRGBAViewModel : ViewModel
     private bool _isTraining;
 
     public ColorStringToRGBAViewModel() {
-        Best = Net.Random();
+        Best = CreateNet();
     }
 
     public async Task Train(CancellationToken cancellation) {
@@ -233,7 +233,7 @@ public partial class ColorStringToRGBAViewModel : ViewModel
     }
 
     protected virtual Net CreateNet() {
-        return Net.Random();
+        return Net.Random(32, 3, 1000);
     }
 
     protected virtual Net MutateNet(Net parent) {
