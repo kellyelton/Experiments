@@ -30,6 +30,8 @@ public class TrainingData
                 val = 2;
             } else throw new InvalidOperationException("invalid last val");
 
+            last_val = val;
+
             if (val == 1) {
                 one_count++;
             } else {
