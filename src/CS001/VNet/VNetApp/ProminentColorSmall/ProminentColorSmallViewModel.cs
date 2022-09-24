@@ -142,7 +142,7 @@ public class ProminentColorSmallViewModel : ViewModel
                 }
             }
 
-            if ((i % 50) == 0) {
+            if ((i % 500) == 0) {
                 LogInfo($"{i}/{runs}");
             }
         }
