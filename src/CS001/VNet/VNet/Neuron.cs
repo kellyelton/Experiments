@@ -29,6 +29,7 @@ public class Neuron
 
     public Neuron(NeuronType type) {
         Type = type;
+        Bias = (Random.Shared.NextDouble() * 2) - 1;
     }
 
     public Neuron(Neuron source) {
@@ -115,7 +116,7 @@ public class Neuron
 
         _outputs.Add(output);
         output._inputs.Add(this);
-        output._input_weights.Add(Random.Shared.NextDouble());
+        output._input_weights.Add((Random.Shared.NextDouble() * 2) - 1);
     }
 
     public void AddOutput(Neuron output, double weight) {
@@ -177,7 +178,7 @@ public class Neuron
 
     public void AdjustInputWeight(int input_index, double weight) {
         if (input_index < 0 || input_index >= _input_weights.Count) throw new ArgumentOutOfRangeException(nameof(input_index), $"{nameof(input_index)} out of bounds");
-        if (weight is < 0 or > 1) throw new ArgumentOutOfRangeException("weight must be between 0 and 1");
+        if (weight is < -1 or > 1) throw new ArgumentOutOfRangeException("weight must be between 0 and 1");
 
         _input_weights[input_index] = weight;
     }
