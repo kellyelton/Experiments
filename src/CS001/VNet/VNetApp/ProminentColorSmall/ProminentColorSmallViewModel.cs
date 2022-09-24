@@ -191,9 +191,12 @@ public class ProminentColorSmallViewModel : ViewModel
         if (c_zero == 0 && c_one == 0 || c_zero == 0 && c_two == 0 || c_one == 0 && c_two == 0)
             avg_score /= 10;
 
-        var total_score = (int)(1000 * avg_score);
+        var total_score = (int)(5000 * avg_score);
+        var size_deduction = Math.Min(40, net.Size);
 
-        total_score = Math.Max(0, total_score - (net.Neurons.Length + net.Neurons.Sum(n => n.Outputs.Count)));
+        total_score -= size_deduction;
+
+        if (total_score < 0) total_score = 0;
 
         net.Score = total_score;
 

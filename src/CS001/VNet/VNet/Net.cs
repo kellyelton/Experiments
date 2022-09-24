@@ -6,6 +6,8 @@ public class Net
 
     public int Score { get; set; }
 
+    public int Size { get; }
+
     public Neuron[] InputNeurons { get; }
 
     public Neuron[] OutputNeurons { get; }
@@ -18,6 +20,7 @@ public class Net
         InputNeurons = Neurons.Where(n => n.Type == NeuronType.Input).ToArray();
         OutputNeurons = Neurons.Where(n => n.Type == NeuronType.Output).ToArray();
         HiddenNeurons = Neurons.Where(n => n.Type == NeuronType.Hidden).ToArray();
+        Size = Neurons.Sum(n => n.Outputs.Count);
     }
 
     public Net(Neuron[] neurons) {
@@ -27,6 +30,7 @@ public class Net
         InputNeurons = Neurons.Where(n => n.Type == NeuronType.Input).ToArray();
         OutputNeurons = Neurons.Where(n => n.Type == NeuronType.Output).ToArray();
         HiddenNeurons = Neurons.Where(n => n.Type == NeuronType.Hidden).ToArray();
+        Size = Neurons.Sum(n => n.Outputs.Count);
     }
 
     public void Reset() {
