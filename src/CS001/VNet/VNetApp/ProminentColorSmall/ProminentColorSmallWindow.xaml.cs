@@ -109,7 +109,7 @@ public partial class ProminentColorSmallWindow : Window
         } else if (result == 2) {
             TryColorResultBorder.Background = Brushes.Black;
         } else {
-            throw new InvalidOperationException($"Iinvalid result {result}");
+            throw new InvalidOperationException($"Invalid result {result}");
         }
         TryColorResultBorder.InvalidateVisual();
     }
