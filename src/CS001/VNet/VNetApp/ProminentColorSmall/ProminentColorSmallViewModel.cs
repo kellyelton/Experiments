@@ -34,9 +34,9 @@ public class ProminentColorSmallViewModel : ViewModel
     private bool _isTraining;
 
     public ProminentColorSmallViewModel(int grid_rows, int grid_columns) {
-        Best = CreateNet();
         Rows = grid_rows;
         Columns = grid_columns;
+        Best = CreateNet();
     }
 
     public async Task Train(CancellationToken cancellation) {
