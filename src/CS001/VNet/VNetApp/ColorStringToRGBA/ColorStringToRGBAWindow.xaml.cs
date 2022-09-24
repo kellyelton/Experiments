@@ -2,7 +2,7 @@
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace VNetApp;
+namespace VNetApp.ColorStringToRGBA;
 
 public partial class ColorStringToRGBAWindow : Window
 {

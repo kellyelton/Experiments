@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace VNetApp;
+namespace VNetApp.ColorStringToRGBA;
 
 public record class TrainingData
 {

@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace VNetApp;
+namespace VNetApp.ColorStringToRGBA;
 
 public partial class ColorStringToRGBAViewModel : ViewModel
 {
