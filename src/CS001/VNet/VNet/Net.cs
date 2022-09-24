@@ -67,11 +67,11 @@ public class Net
         // Make sure each neuron has at least 1 output
         foreach (var input in inputs) {
             var dest = Random(hiddens);
-            input.AddOutput(dest, System.Random.Shared.NextDouble());
+            input.AddOutput(dest);
         }
         foreach (var hidden in hiddens) {
             var dest = Random(dests);
-            hidden.AddOutput(dest, System.Random.Shared.NextDouble());
+            hidden.AddOutput(dest);
         }
 
         // Randomly fill connections
@@ -84,9 +84,8 @@ public class Net
 
         foreach (var source in random_sources) {
             var dest = Random(dests);
-            var weight = System.Random.Shared.NextDouble();
 
-            source.AddOutput(dest, weight);
+            source.AddOutput(dest);
         }
 
         var neurons = inputs.Concat(hiddens).Concat(outputs).ToArray();
@@ -187,7 +186,7 @@ public class Net
                 hiddens.Add(new_neuron);
 
                 // Route new hidden neuron to the original output destination
-                new_neuron.AddOutput(original_output_destination, System.Random.Shared.NextDouble());
+                new_neuron.AddOutput(original_output_destination);
 
                 // Reroute the source output to the new neuron
                 source.RerouteOutput(output, new_neuron);
@@ -200,9 +199,7 @@ public class Net
                     continue;
                 }
 
-                var weight = System.Random.Shared.NextDouble();
-
-                source.AddOutput(dest, weight);
+                source.AddOutput(dest);
             } else if (op < 0.3) { // Remove existing connection
                 var n = Random(inputs, hiddens);
                 if (n.Outputs.Count == 0) {
