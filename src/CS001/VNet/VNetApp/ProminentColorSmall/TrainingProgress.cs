@@ -6,8 +6,11 @@ public struct TrainingProgress
 
     public int MaxProgress = -1;
 
+    public int MutationPoolSize = -1;
+
     public TrainingProgress(int maxProgress) {
         Progress = 0;
+        MutationPoolSize = 0;
         MaxProgress = maxProgress;
     }
 }

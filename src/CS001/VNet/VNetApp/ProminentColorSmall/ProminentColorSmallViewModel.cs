@@ -31,6 +31,8 @@ public class ProminentColorSmallViewModel : ViewModel
 
     public int MaxHighScore { get; } = 5000;
 
+    public int MutationPoolCapacity { get; } = 100;
+
     public int Rows { get; }
 
     public int Columns { get; }
@@ -132,7 +134,7 @@ public class ProminentColorSmallViewModel : ViewModel
                     Fire_NewHighScore(test_result.Net);
                 }
 
-                while (best_brains.Count > 100) {
+                while (best_brains.Count > MutationPoolCapacity) {
                     var k = best_brains.Last();
                     best_brains.Remove(k);
                 }
@@ -157,6 +159,7 @@ public class ProminentColorSmallViewModel : ViewModel
             }
 
             progress.Progress = i;
+            progress.MutationPoolSize = best_brains.Count;
 
             Fire_TrainingProgress(progress);
         }

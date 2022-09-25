@@ -28,6 +28,7 @@ public partial class ProminentColorSmallWindow : Window
     private readonly double cell_height;
 
     private readonly PointCollection _graph_highest_score_points = new();
+    private readonly PointCollection _graph_mutation_pool_size_points = new();
 
     public ProminentColorSmallWindow() {
         ViewModel = new ProminentColorSmallViewModel(1, 3);
@@ -42,6 +43,7 @@ public partial class ProminentColorSmallWindow : Window
         InitializeComponent();
 
         ScoreGraph.Points = _graph_highest_score_points;
+        MutationPoolGraph.Points = _graph_mutation_pool_size_points;
 
         Setting_CheckBox_HibernateAfterTraining.IsChecked = _hibernate_after_training;
 
@@ -77,20 +79,38 @@ public partial class ProminentColorSmallWindow : Window
 
             var x = ScoreGraph.ActualWidth * progress_percent;
 
-            var highest_score_percent = _highestscore / (double)ViewModel.MaxHighScore;
+            { // Score graph
+                var highest_score_percent = _highestscore / (double)ViewModel.MaxHighScore;
 
-            var y = ScoreGraph.ActualHeight * highest_score_percent;
-            y = ScoreGraph.ActualHeight - y;
+                var y = ScoreGraph.ActualHeight * highest_score_percent;
+                y = ScoreGraph.ActualHeight - y;
 
-            var to_point = new Point(x, y);
+                var to_point = new Point(x, y);
 
-            _graph_highest_score_points.Add(to_point);
+                _graph_highest_score_points.Add(to_point);
 
-            var c = (Canvas)ScoreGraph.Parent;
+                var c = (Canvas)ScoreGraph.Parent;
 
-            var cur = Canvas.GetLeft(ScoreGraph);
+                var cur = Canvas.GetLeft(ScoreGraph);
 
-            var poff = c.ActualWidth - x;
+                var poff = c.ActualWidth - x;
+            }
+            { // Best bot count graph
+                var mutation_pool_percent = e.MutationPoolSize / (double)ViewModel.MutationPoolCapacity;
+
+                var y = MutationPoolGraph.ActualHeight * mutation_pool_percent;
+                y = MutationPoolGraph.ActualHeight - y;
+
+                var to_point = new Point(x, y);
+
+                _graph_mutation_pool_size_points.Add(to_point);
+
+                var c = (Canvas)MutationPoolGraph.Parent;
+
+                var cur = Canvas.GetLeft(MutationPoolGraph);
+
+                var poff = c.ActualWidth - x;
+            }
         });
     }
 
@@ -123,6 +143,7 @@ public partial class ProminentColorSmallWindow : Window
         _highestscore = 0;
         _highscore = 0;
         _graph_highest_score_points.Clear();
+        _graph_mutation_pool_size_points.Clear();
 
         await ViewModel.Train(CancellationToken.None);
 
