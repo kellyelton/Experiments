@@ -14,7 +14,7 @@
                 <TabItem Header="Training">
                     <Grid Margin="10">
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="170"/>
                             <RowDefinition Height="10"/>
                             <RowDefinition Height="1*"/>
                             <RowDefinition Height="10"/>
@@ -26,8 +26,20 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <GroupBox Header="Training..." Grid.Row="0" Grid.Column="0" Padding="5">
-                            <Border BorderBrush="#111" BorderThickness="0.2" CornerRadius="0.5" Background="#FEFEFF" Padding="1" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <Canvas Height="100" Width="300" x:Name="ScoreGraph"/>
+                            <Border BorderBrush="#111" BorderThickness="0.2" CornerRadius="0.5" Background="#FEFEFF" Padding="1">
+                                <!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Padding="5">-->
+                                    <Canvas
+                                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=ActualWidth, Mode=OneWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                            Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Border}, Path=ActualHeight, Mode=OneWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                            >
+                                        <Polyline
+                                            x:Name="ScoreGraph"
+                                            Width="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Canvas}, Path=ActualWidth, Mode=OneWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                            Height="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Canvas}, Path=ActualHeight, Mode=OneWay, NotifyOnSourceUpdated=True, NotifyOnTargetUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+                                            Stroke="DarkOliveGreen" StrokeThickness="0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                                            />
+                                    </Canvas>
+                                <!--</ScrollViewer>-->
                             </Border>
                         </GroupBox>
                         <GroupBox Header="Try" Grid.Row="0" Grid.Column="2" Padding="5">
@@ -42,6 +54,7 @@
                                 </StackPanel>
                             </Grid>
                         </GroupBox>
+                        <GridSplitter Margin="1" Background="#FCFCFF" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="1" Grid.ColumnSpan="3" ResizeDirection="Rows" ResizeBehavior="PreviousAndNext"/>
                         <RichTextBox x:Name="LogTextBox" VerticalScrollBarVisibility="Visible" Grid.Row="2" Grid.ColumnSpan="3">
                             <FlowDocument x:Name="LogDocument">
                             </FlowDocument>

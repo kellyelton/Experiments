@@ -27,6 +27,8 @@ public partial class ProminentColorSmallWindow : Window
     private readonly double cell_width;
     private readonly double cell_height;
 
+    private readonly PointCollection _graph_highest_score_points = new();
+
     public ProminentColorSmallWindow() {
         ViewModel = new ProminentColorSmallViewModel(1, 3);
         ViewModel.LogEvent += ViewModel_LogEvent;
@@ -38,6 +40,8 @@ public partial class ProminentColorSmallWindow : Window
         _grid_rectangles = new Rectangle[ViewModel.Columns][];
 
         InitializeComponent();
+
+        ScoreGraph.Points = _graph_highest_score_points;
 
         Setting_CheckBox_HibernateAfterTraining.IsChecked = _hibernate_after_training;
 
@@ -69,14 +73,6 @@ public partial class ProminentColorSmallWindow : Window
 
     private void ViewModel_TrainingProgress(object? sender, TrainingProgress e) {
         Dispatcher.InvokeAsync(() => {
-            var myEllipse = new Ellipse {
-                Fill = Brushes.DarkSlateBlue,
-                StrokeThickness = 1,
-                Stroke = Brushes.DarkSlateBlue,
-                Width = 1,
-                Height = 1
-            };
-
             var progress_percent = e.Progress / (double)e.MaxProgress;
 
             var x = ScoreGraph.ActualWidth * progress_percent;
@@ -86,10 +82,15 @@ public partial class ProminentColorSmallWindow : Window
             var y = ScoreGraph.ActualHeight * highest_score_percent;
             y = ScoreGraph.ActualHeight - y;
 
-            Canvas.SetTop(myEllipse, y);
-            Canvas.SetLeft(myEllipse, x);
+            var to_point = new Point(x, y);
 
-            ScoreGraph.Children.Add(myEllipse);
+            _graph_highest_score_points.Add(to_point);
+
+            var c = (Canvas)ScoreGraph.Parent;
+
+            var cur = Canvas.GetLeft(ScoreGraph);
+
+            var poff = c.ActualWidth - x;
         });
     }
 
@@ -118,6 +119,10 @@ public partial class ProminentColorSmallWindow : Window
 
             return;
         }
+
+        _highestscore = 0;
+        _highscore = 0;
+        _graph_highest_score_points.Clear();
 
         await ViewModel.Train(CancellationToken.None);
 
