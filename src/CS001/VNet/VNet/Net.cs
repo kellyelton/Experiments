@@ -250,7 +250,7 @@ public class Net
                 var original_bias = n.Bias;
 
                 // random number between -0.1 and 0.1
-                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 10;
+                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 100;
 
                 var new_bias = original_bias + mod;
 
@@ -269,7 +269,7 @@ public class Net
                 var original_input_weight = n.InputWeights[input_index];
 
                 // random number between -0.1 and 0.1
-                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 10;
+                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 100;
 
                 var new_input_weight = original_input_weight + mod;
 
