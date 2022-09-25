@@ -128,7 +128,7 @@ public class ProminentColorSmallViewModel : ViewModel
             foreach (var task in tasks) {
                 var test_result = task.Result;
 
-                if (test_result.Score > best_brains.Min(b => b.Score)) {
+                if (test_result.Score >= best_brains.Min.Score) {
                     best_brains.Add(test_result.Net);
 
                     Fire_NewHighScore(test_result.Net);
