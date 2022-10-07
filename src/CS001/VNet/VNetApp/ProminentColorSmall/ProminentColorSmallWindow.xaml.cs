@@ -119,6 +119,8 @@ public partial class ProminentColorSmallWindow : Window
 
     private void ViewModel_NewHighestScore(object? sender, Net e) {
         _highestscore = e.Score;
+
+        Dispatcher.InvokeAsync(RunTry);
     }
 
     private void ViewModel_NewHighScore(object? sender, Net e) {
@@ -200,6 +202,10 @@ public partial class ProminentColorSmallWindow : Window
 
         _grid[x][y] = new_value;
 
+        RunTry();
+    }
+
+    private void RunTry() {
         var flat_grid = _grid.SelectMany(a => a).Select(a => (double)a).ToArray();
         var result = ViewModel.BestPrediction(flat_grid);
 
