@@ -29,7 +29,7 @@ public class ProminentColorSmallViewModel : ViewModel
 
     public int Best_Score { get; set; } = 0;
 
-    public int MaxHighScore { get; } = 5000;
+    public int MaxHighScore { get; } = 20000;
 
     public int MutationPoolCapacity { get; } = 100;
 
@@ -90,7 +90,7 @@ public class ProminentColorSmallViewModel : ViewModel
     protected virtual void Train2(CancellationToken cancellation) {
         cancellation.ThrowIfCancellationRequested();
 
-        const int runs = 1000 * 10;
+        const int runs = 1000 * 100;
 
         var best_brains = new SortedSet<Net>(DescendingScore);
 
@@ -105,16 +105,44 @@ public class ProminentColorSmallViewModel : ViewModel
         Fire_TrainingProgress(progress);
 
         for (var i = 0; i < runs; i++) {
+            var percent_complete = (double)i / runs;
+            var create_rnd_net_threshold = percent_complete  * 3;// * 0.9d;
+
+            //create_rnd_net_threshold = 1 - create_rnd_net_threshold;
+            //create_rnd_net_threshold = Math.Exp(-create_rnd_net_threshold);
+
+            //create_rnd_net_threshold = Math.Min(1, Math.Pow(percent_complete * 4, 2));
+            //create_rnd_net_threshold = Math.Min(1, Math.Sin(percent_complete * 90));
+
+            //var freq = 4;
+
+            //var a = 1 * (0.5 + Math.Sin(2 * Math.PI * freq * (percent_complete - 0.1)));
+            //create_rnd_net_threshold = a;
+
+            if (create_rnd_net_threshold > 1) create_rnd_net_threshold = 1;
+            if (create_rnd_net_threshold < 0) create_rnd_net_threshold = 0;
+
+            if (create_rnd_net_threshold > 1) throw new InvalidOperationException("feljafw");
+
             var tasks = Enumerable
-                .Range(0, 400)
+                .Range(0, 100)
                 .Select(_ => {
-                    if (best_brains.Count > 10 && Random.Shared.NextDouble() > 0.1) {
-                        var ri = Random.Shared.Next(0, best_brains.Count);
-                        var r = best_brains.Skip(ri).Take(1).Single();
-                        return MutateNet(r);
-                    } else {
+                    var r = Random.Shared.NextDouble();
+
+                    if (best_brains.Count == 0 || r > create_rnd_net_threshold) {
                         return CreateNet();
+                    } else {
+                        var ri = Random.Shared.Next(0, best_brains.Count);
+                        var parent = best_brains.Skip(ri).Take(1).Single();
+                        return MutateNet(parent);
                     }
+                    //if (best_brains.Count > 10 && Random.Shared.NextDouble() > 0.1) {
+                    //    var ri = Random.Shared.Next(0, best_brains.Count);
+                    //    var r = best_brains.Skip(ri).Take(1).Single();
+                    //    return MutateNet(r);
+                    //} else {
+                    //    return CreateNet();
+                    //}
                 })
                 .Select(brain => Task.Run(() => {
                     var score = TestNet(brain);
@@ -160,6 +188,7 @@ public class ProminentColorSmallViewModel : ViewModel
 
             progress.Progress = i;
             progress.MutationPoolSize = best_brains.Count;
+            progress.CreateRandomNetChance = create_rnd_net_threshold;
 
             Fire_TrainingProgress(progress);
         }
@@ -248,12 +277,16 @@ public class ProminentColorSmallViewModel : ViewModel
             b = true;
         }
 
+        // Half inputs are 1, half inputs are 2
         if (a && b) return 0;
 
+        // Both false, invalid result
         if (a == b) return -1;
 
+        // Most or all inputs are 1
         if (a) return 1;
 
+        // Most or all inputs are 2
         if (b) return 2;
 
         throw new InvalidOperationException("asdf");

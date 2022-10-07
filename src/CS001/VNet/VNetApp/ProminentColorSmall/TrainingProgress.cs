@@ -8,9 +8,12 @@ public struct TrainingProgress
 
     public int MutationPoolSize = -1;
 
+    public double CreateRandomNetChance = -1;
+
     public TrainingProgress(int maxProgress) {
         Progress = 0;
         MutationPoolSize = 0;
         MaxProgress = maxProgress;
+        CreateRandomNetChance = 0;
     }
 }

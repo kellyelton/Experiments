@@ -6,6 +6,8 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Text;
+using System.IO;
 
 namespace VNetApp.ProminentColorSmall;
 
@@ -29,6 +31,7 @@ public partial class ProminentColorSmallWindow : Window
 
     private readonly PointCollection _graph_highest_score_points = new();
     private readonly PointCollection _graph_mutation_pool_size_points = new();
+    private readonly PointCollection _graph_create_random_net_change_points = new();
 
     public ProminentColorSmallWindow() {
         ViewModel = new ProminentColorSmallViewModel(1, 3);
@@ -44,6 +47,7 @@ public partial class ProminentColorSmallWindow : Window
 
         ScoreGraph.Points = _graph_highest_score_points;
         MutationPoolGraph.Points = _graph_mutation_pool_size_points;
+        CreateRandomNetChangeGraph.Points = _graph_create_random_net_change_points;
 
         Setting_CheckBox_HibernateAfterTraining.IsChecked = _hibernate_after_training;
 
@@ -82,8 +86,8 @@ public partial class ProminentColorSmallWindow : Window
             { // Score graph
                 var highest_score_percent = _highestscore / (double)ViewModel.MaxHighScore;
 
-                var y = ScoreGraph.ActualHeight * highest_score_percent;
-                y = ScoreGraph.ActualHeight - y;
+                var y = (ScoreGraph.ActualHeight - 10) * highest_score_percent;
+                y = ScoreGraph.ActualHeight - y - 5;
 
                 var to_point = new Point(x, y);
 
@@ -98,8 +102,8 @@ public partial class ProminentColorSmallWindow : Window
             { // Best bot count graph
                 var mutation_pool_percent = e.MutationPoolSize / (double)ViewModel.MutationPoolCapacity;
 
-                var y = MutationPoolGraph.ActualHeight * mutation_pool_percent;
-                y = MutationPoolGraph.ActualHeight - y;
+                var y = (MutationPoolGraph.ActualHeight - 10) * mutation_pool_percent;
+                y = MutationPoolGraph.ActualHeight - y - 5;
 
                 var to_point = new Point(x, y);
 
@@ -111,6 +115,22 @@ public partial class ProminentColorSmallWindow : Window
 
                 var poff = c.ActualWidth - x;
             }
+            { // Create rando net chance graph
+                var percent = e.CreateRandomNetChance;
+
+                var y = (CreateRandomNetChangeGraph.ActualHeight - 10) * percent;
+                y = CreateRandomNetChangeGraph.ActualHeight - y - 5;
+
+                var to_point = new Point(x, y);
+
+                _graph_create_random_net_change_points.Add(to_point);
+
+                var c = (Canvas)CreateRandomNetChangeGraph.Parent;
+
+                var cur = Canvas.GetLeft(CreateRandomNetChangeGraph);
+
+                var poff = c.ActualWidth - x;
+            }
         });
     }
 
@@ -119,6 +139,10 @@ public partial class ProminentColorSmallWindow : Window
 
     private void ViewModel_NewHighestScore(object? sender, Net e) {
         _highestscore = e.Score;
+
+        Dispatcher.InvokeAsync(()=>{
+            WriteToFile("best_nets.csv", e);
+        });
 
         Dispatcher.InvokeAsync(RunTry);
     }
@@ -221,6 +245,55 @@ public partial class ProminentColorSmallWindow : Window
             throw new InvalidOperationException($"Invalid result {result}");
         }
         TryColorResultBorder.InvalidateVisual();
+    }
+
+    private void WriteToFile(string name, params Net[] nets) {
+        var sb = new StringBuilder();
+
+        foreach (var net in nets) {
+            foreach (var neuron in net.Neurons) {
+                var values = new object[6];
+                values[0] = neuron.Id;
+                values[1] = $"\"{neuron.Type}\"";
+                values[2] = neuron.Bias;
+
+                var inputs_string = "\"";
+                if (neuron.Inputs.Count > 0) {
+                    foreach (var input in neuron.Inputs) {
+                        inputs_string += input.Id.ToString() + ",";
+                    }
+                    inputs_string = inputs_string[..^1];
+                }
+                inputs_string += "\"";
+                values[3] = inputs_string;
+
+                var input_weights_string = "\"";
+                if (neuron.InputWeights.Count > 0) {
+                    foreach (var weight in neuron.InputWeights) {
+                        input_weights_string += weight.ToString() + ",";
+                    }
+                    input_weights_string = input_weights_string[..^1];
+                }
+                input_weights_string += "\"";
+                values[4] = input_weights_string;
+
+                var outputs_string = "\"";
+                if (neuron.Outputs.Count > 0) {
+                    foreach (var output in neuron.Outputs) {
+                        outputs_string += output.Id.ToString() + ",";
+                    }
+                    outputs_string = outputs_string[..^1];
+                }
+                outputs_string += "\"";
+                values[5] = outputs_string;
+
+                var str = string.Join(",", values);
+
+                sb.AppendLine(str);
+            }
+        }
+
+        File.WriteAllText(name, sb.ToString());
     }
 
     private void Setting_CheckBox_HibernateAfterTraining_Checked(object sender, RoutedEventArgs e) {

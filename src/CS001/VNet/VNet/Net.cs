@@ -107,11 +107,17 @@ public class Net
             return cols[0][o];
         }
 
-        var c = System.Random.Shared.Next(0, cols.Length);
+        while (true) {
+            var c = System.Random.Shared.Next(0, cols.Length);
 
-        var i = System.Random.Shared.Next(0, cols[c].Count);
+            var colcount = cols[c].Count;
 
-        return cols[c][i];
+            if (colcount == 0) continue;
+
+            var i = System.Random.Shared.Next(0, cols[c].Count);
+
+            return cols[c][i];
+        }
     }
 
     public static Net Mutate(Net parent) {
@@ -179,8 +185,8 @@ public class Net
             var op = System.Random.Shared.NextDouble();
 
 
-            if (op < 0.01) { // Remove existing hidden neuron
-                if (hiddens.Count <= 1) { // min hidden neuron count I guess
+            if (op < 0.05) { // Remove existing hidden neuron
+                if (hiddens.Count < 1) { // min hidden neuron count I guess
                     i--;
                     continue;
                 }
@@ -189,7 +195,7 @@ public class Net
 
                 n.Disconnect();
                 hiddens.Remove(n);
-            } else if (op < 0.1) { // Create new hidden neuron
+            } else if (op <= 0.1) { // Create new hidden neuron
                 var source = Random(inputs, hiddens);
 
                 if (source.Outputs.Count == 0) {
@@ -250,7 +256,7 @@ public class Net
                 var original_bias = n.Bias;
 
                 // random number between -0.1 and 0.1
-                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 100;
+                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 10;
 
                 var new_bias = original_bias + mod;
 
@@ -269,7 +275,7 @@ public class Net
                 var original_input_weight = n.InputWeights[input_index];
 
                 // random number between -0.1 and 0.1
-                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 100;
+                var mod = ((System.Random.Shared.NextDouble() * 2) - 1) / 3;
 
                 var new_input_weight = original_input_weight + mod;
 
