@@ -11,4 +11,18 @@
     <ProjectReference Include="..\VNet\VNet.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="ProminentColorSmallMSAI\ProminentColorSmallMSAIWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="ProminentColorSmallMSAI\ProminentColorSmallMSAIWindow.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
 </Project>
